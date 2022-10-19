@@ -138,8 +138,9 @@ public class GameObject extends Serialize {
 
         GameObject go = new GameObject(name, transform);
 
+        // CHECK
         if (Parser.peek() == ',') {
-            Parser.consume('c');
+            Parser.consume(',');
             Parser.consumeBeginObjectProperty("Components");
             go.addComponent(Parser.parseComponent());
 

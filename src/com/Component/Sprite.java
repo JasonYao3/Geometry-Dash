@@ -76,13 +76,13 @@ public class Sprite extends Component {
         StringBuilder builder = new StringBuilder();
 
         builder.append(beginObjectProperty("Sprite", tabSize));
-        builder.append(addBooleanProperty("isSubSprite", isSubsprite, tabSize + 1, true, true));
+        builder.append(addBooleanProperty("isSubsprite", isSubsprite, tabSize + 1, true, true));
 
         if (isSubsprite) {
             builder.append(addStringProperty("FilePath", pictureFile, tabSize + 1, true, true));
             builder.append(addIntProperty("row", row, tabSize + 1, true, true));
             builder.append(addIntProperty("column", column, tabSize + 1, true, true));
-            builder.append(addIntProperty("index", index, tabSize + 1, true, true)); // comma = false?
+            builder.append(addIntProperty("index", index, tabSize + 1, true, false)); // comma = false?
             builder.append(closeObjectProperty(tabSize));
 
             return builder.toString();
@@ -94,7 +94,7 @@ public class Sprite extends Component {
     }
 
     public static Sprite deserialize() {
-        boolean isSubsprite = Parser.consumeBooleanProperty("isSubprite");
+        boolean isSubsprite = Parser.consumeBooleanProperty("isSubsprite");
         Parser.consume(',');
         String filePath = Parser.consumeStringProperty("FilePath");
 
