@@ -54,8 +54,9 @@ public class MenuItem extends Component{
     }
 
     @Override
-    public Component copy() {
-        return null;
+    public MenuItem copy() {
+        return new MenuItem(this.x, this.y, this.width, this.height,
+                (Sprite) this.buttonSprite.copy(), (Sprite) this.hoverSprite.copy());
     }
 
     @Override

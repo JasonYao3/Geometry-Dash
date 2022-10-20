@@ -36,10 +36,10 @@ public class LevelEditorScene extends Scene {
         cameraControls = new CameraControls();
         editingButtons.start();
 
-        mouseCursor = new GameObject("Mouse Cursor", new TransForm(new Vector2()));
+        mouseCursor = new GameObject("Mouse Cursor", new TransForm(new Vector2()), 10);
         mouseCursor.addComponent(new SnapToGrid(Constants.TILE_WIDTH, Constants.TILE_HEIGHT));
 
-        player = new GameObject("game object", new TransForm(new Vector2(500.0f, 300.0f)));
+        player = new GameObject("game object", new TransForm(new Vector2(500.0f, 300.0f)), 0);
         Spritesheet layerOne = AssetPool.getSpritesheet("assets/player/layerOne.png");
         Spritesheet layerTwo = AssetPool.getSpritesheet("assets/player/layerTwo.png");
         Spritesheet layerThree = AssetPool.getSpritesheet("assets/player/layerThree.png");
@@ -51,7 +51,7 @@ public class LevelEditorScene extends Scene {
                 Color.GREEN);
         player.addComponent(playerComp);
 
-        ground = new GameObject("Ground", new TransForm(new Vector2(0, Constants.GROUND_Y)));
+        ground = new GameObject("Ground", new TransForm(new Vector2(0, Constants.GROUND_Y)),1);
         ground.addComponent(new Ground());
 
         ground.setNonserializable();
@@ -73,12 +73,22 @@ public class LevelEditorScene extends Scene {
                 42, 42, 2, 6, 12);
         AssetPool.addSpritesheet("assets/ui/buttonSprites.png",
                 60, 60, 2, 2, 2);
+        AssetPool.addSpritesheet("assets/ui/tabs.png",
+                Constants.TAB_WIDTH, Constants.TAB_HEIGHT, 2, 6, 6);
+        AssetPool.addSpritesheet("assets/spikes.png",
+                42, 42, 2, 6, 4);
+        AssetPool.addSpritesheet("assets/bigSprites.png",
+                84, 84, 2, 2, 2);
+        AssetPool.addSpritesheet("assets/smallBlocks.png",
+                42, 42, 2, 6, 1);
+        AssetPool.addSpritesheet("assets/portal.png",
+                44, 85, 2, 2, 2);
     }
 
     @Override
     public void update(double dt) {
-        if (camera.position.y  > Constants.CAMERA_OFFSET_GROUND_Y) {
-            camera.position.y = Constants.CAMERA_OFFSET_GROUND_Y;
+        if (camera.position.y  > Constants.CAMERA_OFFSET_GROUND_Y + 70) {
+            camera.position.y = Constants.CAMERA_OFFSET_GROUND_Y + 70 ;
         }
 
         for (GameObject g: gameObjects) {
