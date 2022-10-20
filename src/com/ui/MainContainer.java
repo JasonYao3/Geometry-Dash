@@ -23,7 +23,9 @@ public class MainContainer extends Component {
 
     public List<GameObject> tabs;
     public Map<GameObject, List<GameObject>> tabMaps;
-    public GameObject currentTab;
+    private GameObject hotTab = null;
+
+    private GameObject hotButton = null;
 
     public MainContainer() {
         this.menuItems = new ArrayList<>();
@@ -47,13 +49,16 @@ public class MainContainer extends Component {
 
             GameObject obj = new GameObject("Tab", new TransForm(new Vector2(x, y)), 10);
             obj.setUI(true);
-            obj.addComponent(currentTab);
+            TabItem item = new TabItem(x, y, Constants.TAB_WIDTH, Constants.TAB_HEIGHT,
+                    currentTab, this);
+            obj.addComponent(item);
 
             this.tabs.add(obj);
             this.tabMaps.put(obj, new ArrayList<>());
             Window.getWindow().getCurrentScene().addGameObject(obj);
         }
-        this.currentTab = this.tabs.get(0);
+        this.hotTab = this.tabs.get(0);
+        this.hotTab.getComponent(TabItem.class).isSelected = true;
 
         addTabObjects();
     }
@@ -79,7 +84,7 @@ public class MainContainer extends Component {
             obj.setNonserializable();
             obj.addComponent(currentSprite.copy());
             MenuItem menuItem = new MenuItem(x, y, Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT,
-                    buttonSprites.sprites.get(0), buttonSprites.sprites.get(1));
+                    buttonSprites.sprites.get(0), buttonSprites.sprites.get(1), this);
             obj.addComponent(menuItem);
             obj.addComponent(new BoxBounds(Constants.TILE_WIDTH, Constants.TILE_HEIGHT));
             menuItems.add(obj);
@@ -142,7 +147,6 @@ public class MainContainer extends Component {
                 // TODO:: Create portalComponent here
 
                 this.tabMaps.get(tabs.get(5)).add(obj);
-
             }
         }
     }
@@ -155,14 +159,25 @@ public class MainContainer extends Component {
                     c.start();
                 }
             }
-
         }
     }
 
     @Override
     public void update(double dt) {
-        for (GameObject g : this.tabMaps.get(currentTab)) {
+        for (GameObject g : this.tabMaps.get(hotTab)) {
             g.update(dt);
+
+            MenuItem menuItem = g.getComponent(MenuItem.class);
+            if (g != hotButton && menuItem.isSelected) {
+                menuItem.isSelected = false;
+            }
+        }
+
+        for (GameObject g : this.tabs) {
+            TabItem tabItem = g.getComponent(TabItem.class);
+            if (g != hotTab && tabItem.isSelected) {
+                tabItem.isSelected = false;
+            }
         }
     }
 
@@ -176,7 +191,7 @@ public class MainContainer extends Component {
         g2.drawImage(this.containerBg.image, 0, Constants.CONTAINER_OFFSET_Y,
                 this.containerBg.width, this.containerBg.height, null);
 
-        for (GameObject g : this.tabMaps.get(currentTab)) {
+        for (GameObject g : this.tabMaps.get(hotTab)) {
             g.draw(g2);
         }
     }
@@ -184,5 +199,13 @@ public class MainContainer extends Component {
     @Override
     public String serialize(int tabSize) {
         return "";
+    }
+
+    public void setHotButton(GameObject obj) {
+        this.hotButton = obj;
+    }
+
+    public void setHotTab(GameObject obj) {
+        this.hotTab = obj;
     }
 }
